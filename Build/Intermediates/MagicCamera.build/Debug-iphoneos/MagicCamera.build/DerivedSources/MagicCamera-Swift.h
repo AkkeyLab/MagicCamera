@@ -86,15 +86,26 @@ typedef int swift_int2  __attribute__((__ext_vector_type__(2)));
 typedef int swift_int3  __attribute__((__ext_vector_type__(3)));
 typedef int swift_int4  __attribute__((__ext_vector_type__(4)));
 #if defined(__has_feature) && __has_feature(modules)
+@import ObjectiveC;
 @import UIKit;
 @import CoreBluetooth;
+@import LTMorphingLabel;
 #endif
 
 #pragma clang diagnostic ignored "-Wproperty-attribute-mismatch"
 #pragma clang diagnostic ignored "-Wduplicate-method-arg"
+@class UIActivityIndicatorView;
+@class UIViewController;
+
+SWIFT_CLASS("_TtC11MagicCamera17ActivityIndicator")
+@interface ActivityIndicator : NSObject
+@property (nonatomic, strong) UIActivityIndicatorView * __null_unspecified activityIndicator;
+- (void)start:(UIViewController * __nonnull)myself;
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
 @class UIWindow;
 @class UIApplication;
-@class NSObject;
 @class NSURL;
 @class NSManagedObjectModel;
 @class NSPersistentStoreCoordinator;
@@ -137,7 +148,27 @@ SWIFT_CLASS("_TtC11MagicCamera20CameraViewController")
 - (nullable instancetype)initWithCoder:(NSCoder * __nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
 @end
 
+
+SWIFT_CLASS("_TtC11MagicCamera14BackCameraMode")
+@interface BackCameraMode : CameraViewController
+- (void)viewDidLoad;
+- (void)didReceiveMemoryWarning;
+- (nonnull instancetype)initWithNibName:(NSString * __nullable)nibNameOrNil bundle:(NSBundle * __nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithCoder:(NSCoder * __nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
+
+SWIFT_CLASS("_TtC11MagicCamera15FrontCameraMode")
+@interface FrontCameraMode : CameraViewController
+- (void)viewDidLoad;
+- (void)didReceiveMemoryWarning;
+- (nonnull instancetype)initWithNibName:(NSString * __nullable)nibNameOrNil bundle:(NSBundle * __nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithCoder:(NSCoder * __nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
+@end
+
 @class CBUUID;
+@class NSNotification;
 @class CBCentralManager;
 @class CBPeripheral;
 @class NSNumber;
@@ -146,12 +177,16 @@ SWIFT_CLASS("_TtC11MagicCamera20CameraViewController")
 @class CBCharacteristic;
 
 SWIFT_CLASS("_TtC11MagicCamera14ViewController")
-@interface ViewController : UIViewController <CBCentralManagerDelegate, CBPeripheralDelegate>
+@interface ViewController : UIViewController <CBCentralManagerDelegate, CBPeripheralDelegate, LTMorphingLabelDelegate>
 @property (nonatomic) BOOL ble_new;
 @property (nonatomic, readonly, copy) NSArray<CBUUID *> * __nonnull UUID_VSP;
 @property (nonatomic, readonly, strong) CBUUID * __nonnull UUID_TX;
 @property (nonatomic, readonly, strong) CBUUID * __nonnull UUID_RX;
+- (void)viewDidAppear:(BOOL)animated;
 - (void)viewDidLoad;
+- (void)outString;
+- (void)onOrientationChange:(NSNotification * __nonnull)notification;
+- (void)makeParts;
 - (void)centralManagerDidUpdateState:(CBCentralManager * __nonnull)central;
 - (void)centralManager:(CBCentralManager * __nonnull)central didDiscoverPeripheral:(CBPeripheral * __nonnull)peripheral advertisementData:(NSDictionary<NSString *, id> * __nonnull)advertisementData RSSI:(NSNumber * __nonnull)RSSI;
 - (void)centralManager:(CBCentralManager * __nonnull)central didConnectPeripheral:(CBPeripheral * __nonnull)peripheral;
@@ -163,6 +198,7 @@ SWIFT_CLASS("_TtC11MagicCamera14ViewController")
 - (void)peripheral:(CBPeripheral * __null_unspecified)peripheral didWriteValueForCharactertistic:(CBCharacteristic * __null_unspecified)characteristic error:(NSError * __null_unspecified)error;
 - (void)bootCamera;
 - (void)onClickButton:(UIButton * __nonnull)sender;
+- (void)alert:(NSString * __nonnull)titleString messageString:(NSString * __nonnull)messageString buttonString:(NSString * __nonnull)buttonString;
 - (void)didReceiveMemoryWarning;
 - (nonnull instancetype)initWithNibName:(NSString * __nullable)nibNameOrNil bundle:(NSBundle * __nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
 - (nullable instancetype)initWithCoder:(NSCoder * __nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;

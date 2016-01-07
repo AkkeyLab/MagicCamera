@@ -8,8 +8,9 @@
 
 import UIKit
 import CoreBluetooth
+import LTMorphingLabel
 
-class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDelegate {
+class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDelegate, LTMorphingLabelDelegate {
     
     //New BLE
     var ble_new: Bool = true
@@ -27,39 +28,106 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     
     private var ble_CentralManager: CBCentralManager!
     private var ble_TargetPeripheral: CBPeripheral!
+    
+    //Indicator
+    private let indicator = ActivityIndicator()
+    private var indicatorBool = true
 
+    //Text
+    private let mainLabel: LTMorphingLabel = LTMorphingLabel()
+    private var outStringCnt = 0
+    
+    //Debug
+    private var debugButton: UIButton!
+    
+    
+    override func viewDidAppear(animated: Bool) {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onOrientationChange:", name: UIDeviceOrientationDidChangeNotification, object: nil)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.view.backgroundColor = UIColor.whiteColor()
+        
         ble_CentralManager = CBCentralManager(delegate: self, queue: nil, options: nil)
+        //Indicator
+        indicator.start(self)
+        
+        makeParts()
+    }
+    
+    func outString(){
+        var textArray = ["MagicCamera", "will work", "in conjunction with", "MysticSD"]
+        mainLabel.text = textArray[outStringCnt]
+        
+        if outStringCnt == 3 {
+            outStringCnt = 0
+        }else{
+            outStringCnt++
+        }
+    }
+    
+    func onOrientationChange(notification: NSNotification){
+        mainLabel.layer.position = CGPoint(x: self.view.frame.width / 2, y: self.view.frame.height / 3)
+        debugButton.layer.position = CGPoint(x: self.view.frame.width - 50, y: self.view.frame.height - 50)
+        if indicatorBool {
+            indicator.activityIndicator.stopAnimating()
+            indicator.start(self)
+        }
     }
 
+    func makeParts(){
+        mainLabel.delegate = self
+        mainLabel.frame = CGRectMake(0, 0, 320, 200)
+        mainLabel.textAlignment = NSTextAlignment.Center
+        mainLabel.adjustsFontSizeToFitWidth = true
+        mainLabel.layer.position = CGPoint(x: self.view.frame.width / 2, y: self.view.frame.height / 3)
+        mainLabel.font = UIFont(name: "TimesNewRomanPSMT", size: 30)
+        self.mainLabel.text = "Hello"
+        self.view.backgroundColor = UIColor.whiteColor()
+        mainLabel.textColor = UIColor.blackColor()
+        self.view.addSubview(mainLabel)
+        
+        mainLabel.morphingEffect = .Scale
+        NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: "outString", userInfo: nil, repeats: true)
+        
+        debugButton = UIButton()
+        debugButton.frame = CGRectMake(0, 0, 50, 50)
+        debugButton.backgroundColor = UIColor.grayColor()
+        debugButton.layer.masksToBounds = true
+        debugButton.setTitle("＊", forState: UIControlState.Normal)
+        debugButton.layer.cornerRadius = 10.0
+        debugButton.layer.position = CGPoint(x: self.view.frame.width - 50, y: self.view.frame.height - 50)
+        debugButton.alpha = 0.7
+        debugButton.addTarget(self, action: "onClickButton:", forControlEvents: .TouchUpInside)
+        self.view.addSubview(debugButton)
+    }
+    
+    //BLE setting start. ++++++++++++++++++++++++++
     func centralManagerDidUpdateState(central: CBCentralManager) {
         switch(central.state){
         case .PoweredOff:
             NSLog("Bluetooth OFF")
-            //alert("Bluetooth OFF",messageString: "設定でBluetoothをオンにしてください", buttonString: "OK")
+            alert("Bluetooth OFF",messageString: "設定でBluetoothをオンにしてください", buttonString: "OK")
             //Setting open
-            let url = NSURL(string: UIApplicationOpenSettingsURLString)
-            UIApplication.sharedApplication().openURL(url!)
+            //let url = NSURL(string: UIApplicationOpenSettingsURLString)
+            //UIApplication.sharedApplication().openURL(url!)
         case .PoweredOn:
             NSLog("Bluetooth ON")
             //BLE Start
             ble_CentralManager.scanForPeripheralsWithServices(UUID_VSP, options: nil)
         case .Resetting:
             NSLog("Resetting")
-            //alert("Resetting",messageString: "開発担当までご連絡ください", buttonString: "OK")
+            alert("Resetting",messageString: "開発担当までご連絡ください", buttonString: "OK")
         case .Unauthorized:
             NSLog("Unauthorized")
-            //alert("Unauthorized",messageString: "開発担当までご連絡ください", buttonString: "OK")
+            alert("Unauthorized",messageString: "開発担当までご連絡ください", buttonString: "OK")
         case .Unknown:
             NSLog("Unknown")
-            //alert("Unknown",messageString: "開発担当までご連絡ください", buttonString: "OK")
+            alert("Unknown",messageString: "開発担当までご連絡ください", buttonString: "OK")
         case .Unsupported:
             NSLog("Unsupported")
-            //alert("Unsupported",messageString: "お使いの端末はBluetooth非対応です", buttonString: "OK")
+            alert("Unsupported",messageString: "お使いの端末はBluetooth非対応です", buttonString: "OK")
         }
     }
     
@@ -77,7 +145,8 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
             
             if name == "BLESerial2" {
                 //Indicator stop
-                //indicator.activityIndicator.stopAnimating()
+                indicator.activityIndicator.stopAnimating()
+                indicatorBool = false
                 
                 //View remove
                 //removeAllSubviews(self.view, kind: "ble_start")
@@ -178,18 +247,47 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         //peripheral.readValueForCharacteristic(characteristic) // Read only once
         //peripheral.setNotifyValue(true, forCharacteristic: characteristic) // Notify
     }
+    //BLE setting end. ++++++++++++++++++++++++++++
     
     func bootCamera(){
-        let camera: UIViewController = CameraViewController()
-        camera.modalTransitionStyle = UIModalTransitionStyle.PartialCurl
-        self.presentViewController(camera, animated: true, completion: nil)
+        //Now orientation
+        let deviceOrientation: UIDeviceOrientation!  = UIDevice.currentDevice().orientation
+        
+        if UIDeviceOrientationIsLandscape(deviceOrientation) {
+            let camera: UIViewController = BackCameraMode()
+            camera.modalTransitionStyle = UIModalTransitionStyle.PartialCurl
+            self.presentViewController(camera, animated: true, completion: nil)
+            
+        }else
+        if UIDeviceOrientationIsPortrait(deviceOrientation){
+            let camera: UIViewController = FrontCameraMode()
+            camera.modalTransitionStyle = UIModalTransitionStyle.PartialCurl
+            self.presentViewController(camera, animated: true, completion: nil)
+        }
+    }
+    
+    internal func onClickButton(sender: UIButton){
+        if sender == debugButton {
+            bootCamera()
+        }
+    }
+    
+    func alert(titleString: String, messageString: String, buttonString: String){
+        //Create UIAlertController
+        let alert: UIAlertController = UIAlertController(title: titleString, message: messageString, preferredStyle: .Alert)
+        //Create action
+        let action = UIAlertAction(title: buttonString, style: .Default) { action in
+            NSLog("\(titleString):Push button!")
+        }
+        //Add action
+        alert.addAction(action)
+        //Start
+        presentViewController(alert, animated: true, completion: nil)
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-
 }
 

@@ -16,6 +16,10 @@
 		661A71AD1C2BC17A000DEAAA /* MagicCameraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 661A71AC1C2BC17A000DEAAA /* MagicCameraTests.swift */; };
 		661A71B81C2BC17A000DEAAA /* MagicCameraUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 661A71B71C2BC17A000DEAAA /* MagicCameraUITests.swift */; };
 		661A71C61C2BC497000DEAAA /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 661A71C51C2BC497000DEAAA /* CameraViewController.swift */; };
+		668FEB9B1C3E04B5002C40D3 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668FEB9A1C3E04B5002C40D3 /* ActivityIndicator.swift */; };
+		668FEB9D1C3E0CEB002C40D3 /* FrontCameraMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668FEB9C1C3E0CEB002C40D3 /* FrontCameraMode.swift */; };
+		668FEB9F1C3E0D73002C40D3 /* BackCameraMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668FEB9E1C3E0D73002C40D3 /* BackCameraMode.swift */; };
+		82DB443310AFCFC76BE37209 /* Pods_MagicCamera.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC3160595F3B9EF3A5170C75 /* Pods_MagicCamera.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +55,12 @@
 		661A71B71C2BC17A000DEAAA /* MagicCameraUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagicCameraUITests.swift; sourceTree = "<group>"; };
 		661A71B91C2BC17A000DEAAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		661A71C51C2BC497000DEAAA /* CameraViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
+		668FEB9A1C3E04B5002C40D3 /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
+		668FEB9C1C3E0CEB002C40D3 /* FrontCameraMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrontCameraMode.swift; sourceTree = "<group>"; };
+		668FEB9E1C3E0D73002C40D3 /* BackCameraMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackCameraMode.swift; sourceTree = "<group>"; };
+		7A9F7D692F954DBB838FD8DA /* Pods-MagicCamera.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MagicCamera.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MagicCamera/Pods-MagicCamera.debug.xcconfig"; sourceTree = "<group>"; };
+		CEBC8A89E964840E98DA8D48 /* Pods-MagicCamera.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MagicCamera.release.xcconfig"; path = "Pods/Target Support Files/Pods-MagicCamera/Pods-MagicCamera.release.xcconfig"; sourceTree = "<group>"; };
+		EC3160595F3B9EF3A5170C75 /* Pods_MagicCamera.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MagicCamera.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				82DB443310AFCFC76BE37209 /* Pods_MagicCamera.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +89,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0BFC1AFD97C68CECF49B4C41 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EC3160595F3B9EF3A5170C75 /* Pods_MagicCamera.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		661A71881C2BC17A000DEAAA = {
 			isa = PBXGroup;
 			children = (
@@ -85,6 +104,8 @@
 				661A71AB1C2BC17A000DEAAA /* MagicCameraTests */,
 				661A71B61C2BC17A000DEAAA /* MagicCameraUITests */,
 				661A71921C2BC17A000DEAAA /* Products */,
+				6D79EC0562A363FD39EF1CA5 /* Pods */,
+				0BFC1AFD97C68CECF49B4C41 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -101,6 +122,7 @@
 		661A71931C2BC17A000DEAAA /* MagicCamera */ = {
 			isa = PBXGroup;
 			children = (
+				668FEB9A1C3E04B5002C40D3 /* ActivityIndicator.swift */,
 				661A71941C2BC17A000DEAAA /* AppDelegate.swift */,
 				661A71961C2BC17A000DEAAA /* ViewController.swift */,
 				661A71981C2BC17A000DEAAA /* Main.storyboard */,
@@ -109,6 +131,8 @@
 				661A71A31C2BC17A000DEAAA /* Info.plist */,
 				661A719B1C2BC17A000DEAAA /* MagicCamera.xcdatamodeld */,
 				661A71C51C2BC497000DEAAA /* CameraViewController.swift */,
+				668FEB9C1C3E0CEB002C40D3 /* FrontCameraMode.swift */,
+				668FEB9E1C3E0D73002C40D3 /* BackCameraMode.swift */,
 			);
 			path = MagicCamera;
 			sourceTree = "<group>";
@@ -131,6 +155,15 @@
 			path = MagicCameraUITests;
 			sourceTree = "<group>";
 		};
+		6D79EC0562A363FD39EF1CA5 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				7A9F7D692F954DBB838FD8DA /* Pods-MagicCamera.debug.xcconfig */,
+				CEBC8A89E964840E98DA8D48 /* Pods-MagicCamera.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -138,9 +171,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 661A71BC1C2BC17A000DEAAA /* Build configuration list for PBXNativeTarget "MagicCamera" */;
 			buildPhases = (
+				C26A29F58B426B0F5CA37E92 /* Check Pods Manifest.lock */,
 				661A718D1C2BC17A000DEAAA /* Sources */,
 				661A718E1C2BC17A000DEAAA /* Frameworks */,
 				661A718F1C2BC17A000DEAAA /* Resources */,
+				5C4B9AE30EB49D166DD780C8 /* Embed Pods Frameworks */,
+				EDDDC4AA12A4F2EC0EC36986 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -258,13 +294,64 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		5C4B9AE30EB49D166DD780C8 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MagicCamera/Pods-MagicCamera-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C26A29F58B426B0F5CA37E92 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		EDDDC4AA12A4F2EC0EC36986 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MagicCamera/Pods-MagicCamera-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		661A718D1C2BC17A000DEAAA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				668FEB9F1C3E0D73002C40D3 /* BackCameraMode.swift in Sources */,
 				661A71971C2BC17A000DEAAA /* ViewController.swift in Sources */,
+				668FEB9B1C3E04B5002C40D3 /* ActivityIndicator.swift in Sources */,
 				661A71C61C2BC497000DEAAA /* CameraViewController.swift in Sources */,
+				668FEB9D1C3E0CEB002C40D3 /* FrontCameraMode.swift in Sources */,
 				661A71951C2BC17A000DEAAA /* AppDelegate.swift in Sources */,
 				661A719D1C2BC17A000DEAAA /* MagicCamera.xcdatamodeld in Sources */,
 			);
@@ -406,6 +493,7 @@
 		};
 		661A71BD1C2BC17A000DEAAA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7A9F7D692F954DBB838FD8DA /* Pods-MagicCamera.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -418,6 +506,7 @@
 		};
 		661A71BE1C2BC17A000DEAAA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CEBC8A89E964840E98DA8D48 /* Pods-MagicCamera.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -495,6 +584,7 @@
 				661A71BE1C2BC17A000DEAAA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		661A71BF1C2BC17A000DEAAA /* Build configuration list for PBXNativeTarget "MagicCameraTests" */ = {
 			isa = XCConfigurationList;
@@ -503,6 +593,7 @@
 				661A71C11C2BC17A000DEAAA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		661A71C21C2BC17A000DEAAA /* Build configuration list for PBXNativeTarget "MagicCameraUITests" */ = {
 			isa = XCConfigurationList;
@@ -511,6 +602,7 @@
 				661A71C41C2BC17A000DEAAA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

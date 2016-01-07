@@ -1,7 +1,10 @@
 version: "Apple Swift version 2.1 (swiftlang-700.1.101.6 clang-700.1.76)"
-options: "5728b524f8a3b34c7881e885a149b955"
-build_time: [504258695, 183998000]
+options: "790e268989700b64f3cc10887a92b05f"
+build_time: [505456520, 446048000]
 inputs:
-  "/Users/AKIO/Documents/Program/Xcode/MagicCamera/MagicCamera/CameraViewController.swift": [504258477, 0]
+  "/Users/AKIO/Documents/Program/Xcode/MagicCamera/MagicCamera/ActivityIndicator.swift": [505069092, 0]
   "/Users/AKIO/Documents/Program/Xcode/MagicCamera/MagicCamera/AppDelegate.swift": [504253172, 0]
-  "/Users/AKIO/Documents/Program/Xcode/MagicCamera/MagicCamera/ViewController.swift": [504258695, 0]
+  "/Users/AKIO/Documents/Program/Xcode/MagicCamera/MagicCamera/BackCameraMode.swift": [505456448, 0]
+  "/Users/AKIO/Documents/Program/Xcode/MagicCamera/MagicCamera/FrontCameraMode.swift": [505451213, 0]
+  "/Users/AKIO/Documents/Program/Xcode/MagicCamera/MagicCamera/ViewController.swift": [505456520, 0]
+  "/Users/AKIO/Documents/Program/Xcode/MagicCamera/MagicCamera/CameraViewController.swift": [505454307, 0]

@@ -58,6 +58,34 @@
 			<key>optional</key>
 			<true/>
 		</dict>
+		<key>Frameworks/LTMorphingLabel.framework/Fire.png</key>
+		<data>
+		F0cZdgxwHcLCodlfEDZWGotiIgQ=
+		</data>
+		<key>Frameworks/LTMorphingLabel.framework/Fragment.png</key>
+		<data>
+		l3urCvPyqhREKbZT+7ilj6KgAHU=
+		</data>
+		<key>Frameworks/LTMorphingLabel.framework/Info.plist</key>
+		<data>
+		hRqvWIXUciRGs1BoO7YMbonRLTs=
+		</data>
+		<key>Frameworks/LTMorphingLabel.framework/LTMorphingLabel</key>
+		<data>
+		I8MwS0FcVskMypc7Ey4HD4Uk+3k=
+		</data>
+		<key>Frameworks/LTMorphingLabel.framework/Smoke.png</key>
+		<data>
+		v9mCAKiYu1woOTYQN0Wp80cUThk=
+		</data>
+		<key>Frameworks/LTMorphingLabel.framework/Sparkle.png</key>
+		<data>
+		tjEzoeyEBM/3+T7vyx1hEYbwuis=
+		</data>
+		<key>Frameworks/LTMorphingLabel.framework/_CodeSignature/CodeResources</key>
+		<data>
+		1di56o4g79L6aE74taKQxbOMYs8=
+		</data>
 		<key>Frameworks/libswiftAVFoundation.dylib</key>
 		<data>
 		sUHPpiIX610OzjDHk8Hb6wSYXB4=
@@ -116,7 +144,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		5pkRxXop8WKtZg/hKqa5/2kdnUg=
+		VSRq2+NaJCaF9/U7sQur5MvI8so=
 		</data>
 		<key>MagicCamera.momd/MagicCamera.mom</key>
 		<data>
@@ -136,7 +164,7 @@
 		</data>
 		<key>embedded.mobileprovision</key>
 		<data>
-		D0iBzAL5alM1QX7ZKnIf1JkeV/c=
+		1CqPpOBikqTomjXSBVqbMl8zvec=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -195,6 +223,34 @@
 			<key>optional</key>
 			<true/>
 		</dict>
+		<key>Frameworks/LTMorphingLabel.framework/Fire.png</key>
+		<data>
+		F0cZdgxwHcLCodlfEDZWGotiIgQ=
+		</data>
+		<key>Frameworks/LTMorphingLabel.framework/Fragment.png</key>
+		<data>
+		l3urCvPyqhREKbZT+7ilj6KgAHU=
+		</data>
+		<key>Frameworks/LTMorphingLabel.framework/Info.plist</key>
+		<data>
+		hRqvWIXUciRGs1BoO7YMbonRLTs=
+		</data>
+		<key>Frameworks/LTMorphingLabel.framework/LTMorphingLabel</key>
+		<data>
+		I8MwS0FcVskMypc7Ey4HD4Uk+3k=
+		</data>
+		<key>Frameworks/LTMorphingLabel.framework/Smoke.png</key>
+		<data>
+		v9mCAKiYu1woOTYQN0Wp80cUThk=
+		</data>
+		<key>Frameworks/LTMorphingLabel.framework/Sparkle.png</key>
+		<data>
+		tjEzoeyEBM/3+T7vyx1hEYbwuis=
+		</data>
+		<key>Frameworks/LTMorphingLabel.framework/_CodeSignature/CodeResources</key>
+		<data>
+		1di56o4g79L6aE74taKQxbOMYs8=
+		</data>
 		<key>Frameworks/libswiftAVFoundation.dylib</key>
 		<data>
 		sUHPpiIX610OzjDHk8Hb6wSYXB4=
@@ -265,7 +321,7 @@
 		</data>
 		<key>embedded.mobileprovision</key>
 		<data>
-		D0iBzAL5alM1QX7ZKnIf1JkeV/c=
+		1CqPpOBikqTomjXSBVqbMl8zvec=
 		</data>
 	</dict>
 	<key>rules</key>

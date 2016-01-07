@@ -11,11 +11,8 @@ import AVFoundation
 
 class CameraViewController: UIViewController {
 
-    // セッション.
     var mySession : AVCaptureSession!
-    // デバイス.
     var myDevice : AVCaptureDevice!
-    // 画像のアウトプット.
     var myImageOutput : AVCaptureStillImageOutput!
     
     var myButton: UIButton!
@@ -25,18 +22,16 @@ class CameraViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // セッションの作成.
+        /*
         mySession = AVCaptureSession()
         
-        // デバイス一覧の取得.
         let devices = AVCaptureDevice.devices()
-        
-        // バックカメラをmyDeviceに格納.
         for device in devices{
             if(device.position == AVCaptureDevicePosition.Back){
                 myDevice = device as! AVCaptureDevice
             }
         }
+        */
         
         // バックカメラからVideoInputを取得.
         //let videoInput = AVCaptureDeviceInput.deviceInputWithDevice(myDevice, error: nil) as! AVCaptureDeviceInput
