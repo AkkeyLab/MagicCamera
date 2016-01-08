@@ -11,16 +11,19 @@ import AVFoundation
 
 class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
 
-    var cameraSession: AVCaptureSession!
-    var cameraDevice:  AVCaptureDevice!
-    var videoOutput:   AVCaptureVideoDataOutput!
+    private var cameraSession: AVCaptureSession!
+            var cameraDevice:  AVCaptureDevice!
+    private var videoOutput:   AVCaptureVideoDataOutput!
     
-    var takeButton: UIButton!
-    var backButton: UIButton!
+    private var takeButton: UIButton!
+    private var backButton: UIButton!
+    
+    private let talker = AVSpeechSynthesizer()
+    private var takePhotoBool = false
+    private var photo: UIImage!
     
     //Face find object
     let detector = Detector()
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +31,7 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
         //Setup for start
         cameraSession = AVCaptureSession()
         cameraSession.sessionPreset = AVCaptureSessionPresetHigh
+        takePhotoBool = false
         
         //Get VideoInput for select camera
         //*** Swift1.xx -> Swift2.xx Fix ***//
@@ -108,6 +112,8 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
     func captureOutput(captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, fromConnection connection: AVCaptureConnection!){
         dispatch_sync(dispatch_get_main_queue(), {
             let image = CameraUtil.imageFromSampleBuffer(sampleBuffer)
+            self.photo = image
+            
             //Image resize
             //let size = CGSize(width: 36, height: 48) Not recognize and use CPU is (x2 == self).
             let size = CGSize(width: 72, height: 96)
@@ -121,7 +127,11 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
             
             if faceImage > 0 {
                 //self.takeImage()
-                NSLog("Find!!")
+                if !self.takePhotoBool {
+                    self.helloPhoto()
+                    NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: "takePhoto", userInfo: nil, repeats: false)
+                    self.takePhotoBool = true
+                }
             }
         })
     }
@@ -130,6 +140,9 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
         
         if(sender == takeButton){
             //takeImage()
+            let utterance = AVSpeechUtterance(string: "ボタンが押されました")
+            utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
+            talker.speakUtterance(utterance)
         }
         else if(sender == backButton){
             cameraSession.stopRunning()
@@ -139,5 +152,19 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
             self.presentViewController(main, animated: true, completion: nil)
         }
         
+    }
+    
+    func helloPhoto(){
+        let utterance = AVSpeechUtterance(string: "撮影します。さん、にぃ、いち。")
+        utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
+        talker.speakUtterance(utterance)
+    }
+    
+    func takePhoto(){
+        if photo != nil {
+            AudioServicesPlaySystemSound(1108)
+            UIImageWriteToSavedPhotosAlbum(photo, self, nil, nil)
+            NSLog("Take")
+        }
     }
 }

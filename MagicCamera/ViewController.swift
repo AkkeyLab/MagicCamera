@@ -263,6 +263,10 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
             let camera: UIViewController = FrontCameraMode()
             camera.modalTransitionStyle = UIModalTransitionStyle.PartialCurl
             self.presentViewController(camera, animated: true, completion: nil)
+        }else{
+            let camera: UIViewController = FrontCameraMode()
+            camera.modalTransitionStyle = UIModalTransitionStyle.PartialCurl
+            self.presentViewController(camera, animated: true, completion: nil)
         }
     }
     
