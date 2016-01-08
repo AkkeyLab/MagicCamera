@@ -12,12 +12,11 @@ import AVFoundation
 class FrontCameraMode: CameraViewController {
 
     override func viewDidLoad() {
-        mySession = AVCaptureSession()
         
         let devices = AVCaptureDevice.devices()
         for device in devices{
             if(device.position == AVCaptureDevicePosition.Front){
-                myDevice = device as! AVCaptureDevice
+                cameraDevice = device as! AVCaptureDevice
             }
         }
         

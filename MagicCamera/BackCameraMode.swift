@@ -12,12 +12,11 @@ import AVFoundation
 class BackCameraMode: CameraViewController {
     
     override func viewDidLoad() {
-        mySession = AVCaptureSession()
         
         let devices = AVCaptureDevice.devices()
         for device in devices{
             if(device.position == AVCaptureDevicePosition.Back){
-                myDevice = device as! AVCaptureDevice
+                cameraDevice = device as! AVCaptureDevice
             }
         }
         

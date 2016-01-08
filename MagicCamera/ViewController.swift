@@ -252,7 +252,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     func bootCamera(){
         //Now orientation
         let deviceOrientation: UIDeviceOrientation!  = UIDevice.currentDevice().orientation
-        
+    
         if UIDeviceOrientationIsLandscape(deviceOrientation) {
             let camera: UIViewController = BackCameraMode()
             camera.modalTransitionStyle = UIModalTransitionStyle.PartialCurl
@@ -269,6 +269,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     internal func onClickButton(sender: UIButton){
         if sender == debugButton {
             bootCamera()
+            NSLog("Boot")
         }
     }
     

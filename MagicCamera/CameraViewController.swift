@@ -9,73 +9,92 @@
 import UIKit
 import AVFoundation
 
-class CameraViewController: UIViewController {
+class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
 
-    var mySession : AVCaptureSession!
-    var myDevice : AVCaptureDevice!
-    var myImageOutput : AVCaptureStillImageOutput!
+    var cameraSession: AVCaptureSession!
+    var cameraDevice:  AVCaptureDevice!
+    var videoOutput:   AVCaptureVideoDataOutput!
     
-    var myButton: UIButton!
+    var takeButton: UIButton!
     var backButton: UIButton!
+    
+    //Face find object
+    let detector = Detector()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        /*
-        mySession = AVCaptureSession()
+        //Setup for start
+        cameraSession = AVCaptureSession()
+        cameraSession.sessionPreset = AVCaptureSessionPresetHigh
         
-        let devices = AVCaptureDevice.devices()
-        for device in devices{
-            if(device.position == AVCaptureDevicePosition.Back){
-                myDevice = device as! AVCaptureDevice
-            }
-        }
-        */
-        
-        // バックカメラからVideoInputを取得.
+        //Get VideoInput for select camera
+        //*** Swift1.xx -> Swift2.xx Fix ***//
         //let videoInput = AVCaptureDeviceInput.deviceInputWithDevice(myDevice, error: nil) as! AVCaptureDeviceInput
         let videoInput: AVCaptureInput!
         do{
-            videoInput = try AVCaptureDeviceInput.init(device: myDevice)
+            videoInput = try AVCaptureDeviceInput.init(device: cameraDevice)
         }catch{
             videoInput = nil
         }
         
-        // セッションに追加.
-        mySession.addInput(videoInput)
+        //Add session
+        cameraSession.addInput(videoInput)
+        //Output setting
+        videoOutput = AVCaptureVideoDataOutput()
+        videoOutput.videoSettings = [ kCVPixelBufferPixelFormatTypeKey: Int(kCVPixelFormatType_32BGRA) ]
         
-        // 出力先を生成.
-        myImageOutput = AVCaptureStillImageOutput()
+        //FPS setting
+        do {
+            try cameraDevice.lockForConfiguration()
+            
+            cameraDevice.activeVideoMinFrameDuration = CMTimeMake(1, 15)
+            cameraDevice.unlockForConfiguration()
+        } catch let error {
+            NSLog("ERROR:\(error)")
+        }
         
-        // セッションに追加.
-        mySession.addOutput(myImageOutput)
+        //Delegate setting
+        let queue: dispatch_queue_t = dispatch_queue_create("myqueue",  nil)
+        videoOutput.setSampleBufferDelegate(self, queue: queue)
         
-        // 画像を表示するレイヤーを生成.
+        //Frame setting
+        videoOutput.alwaysDiscardsLateVideoFrames = true
+        
+        //Add session
+        cameraSession.addOutput(videoOutput)
+        
+        //Camera setting
+        for connection in videoOutput.connections {
+            if let conn = connection as? AVCaptureConnection {
+                if conn.supportsVideoOrientation {
+                    conn.videoOrientation = AVCaptureVideoOrientation.Portrait
+                }
+            }
+        }
+        
+        //Make image layer
+        //*** Swift1.xx -> Swift2.xx Fix ***//
         //let myVideoLayer : AVCaptureVideoPreviewLayer = AVCaptureVideoPreviewLayer.layerWithSession(mySession) as! AVCaptureVideoPreviewLayer
-        let myVideoLayer : AVCaptureVideoPreviewLayer = AVCaptureVideoPreviewLayer.init(session: mySession)
-        myVideoLayer.frame = self.view.bounds
-        myVideoLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+        let videoLayer : AVCaptureVideoPreviewLayer = AVCaptureVideoPreviewLayer.init(session: cameraSession)
+        videoLayer.frame = self.view.bounds
+        videoLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+        self.view.layer.addSublayer(videoLayer)
         
-        // Viewに追加.
-        self.view.layer.addSublayer(myVideoLayer)
+        //Session start
+        cameraSession.startRunning()
         
-        // セッション開始.
-        mySession.startRunning()
+        //Make parts
+        takeButton = UIButton(frame: CGRectMake(0,0,120,50))
+        takeButton.backgroundColor = UIColor.redColor();
+        takeButton.layer.masksToBounds = true
+        takeButton.setTitle("撮影", forState: .Normal)
+        takeButton.layer.cornerRadius = 20.0
+        takeButton.layer.position = CGPoint(x: self.view.bounds.width/2, y:self.view.bounds.height-50)
+        takeButton.addTarget(self, action: "onClickButton:", forControlEvents: .TouchUpInside)
+        self.view.addSubview(takeButton);
         
-        // UIボタンを作成.
-        myButton = UIButton(frame: CGRectMake(0,0,120,50))
-        myButton.backgroundColor = UIColor.redColor();
-        myButton.layer.masksToBounds = true
-        myButton.setTitle("撮影", forState: .Normal)
-        myButton.layer.cornerRadius = 20.0
-        myButton.layer.position = CGPoint(x: self.view.bounds.width/2, y:self.view.bounds.height-50)
-        myButton.addTarget(self, action: "onClickButton:", forControlEvents: .TouchUpInside)
-        
-        // UIボタンをViewに追加.
-        self.view.addSubview(myButton);
-        
-        // ボタンを作成.
         backButton = UIButton(frame: CGRectMake(0,0,120,50))
         backButton.backgroundColor = UIColor.redColor();
         backButton.layer.masksToBounds = true
@@ -84,31 +103,37 @@ class CameraViewController: UIViewController {
         backButton.layer.position = CGPoint(x: self.view.bounds.width/2 , y:self.view.bounds.height-150)
         backButton.addTarget(self, action: "onClickButton:", forControlEvents: .TouchUpInside)
         self.view.addSubview(backButton);
-        
     }
     
-    // ボタンイベント.
+    func captureOutput(captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, fromConnection connection: AVCaptureConnection!){
+        dispatch_sync(dispatch_get_main_queue(), {
+            let image = CameraUtil.imageFromSampleBuffer(sampleBuffer)
+            //Image resize
+            //let size = CGSize(width: 36, height: 48) Not recognize and use CPU is (x2 == self).
+            let size = CGSize(width: 72, height: 96)
+            UIGraphicsBeginImageContext(size)
+            image.drawInRect(CGRectMake(0, 0, size.width, size.height))
+            let resizeImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            
+            //Face find
+            let faceImage = self.detector.recognizeFace(resizeImage)
+            
+            if faceImage > 0 {
+                //self.takeImage()
+                NSLog("Find!!")
+            }
+        })
+    }
+    
     func onClickButton(sender: UIButton){
         
-        if(sender == myButton){
-            // ビデオ出力に接続.
-            let myVideoConnection = myImageOutput.connectionWithMediaType(AVMediaTypeVideo)
-            
-            // 接続から画像を取得.
-            self.myImageOutput.captureStillImageAsynchronouslyFromConnection(myVideoConnection, completionHandler: { (imageDataBuffer, error) -> Void in
-                
-                // 取得したImageのDataBufferをJpegに変換.
-                let myImageData : NSData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataBuffer)
-                
-                // JpegからUIIMageを作成.
-                let myImage : UIImage = UIImage(data: myImageData)!
-                
-                // アルバムに追加.
-                UIImageWriteToSavedPhotosAlbum(myImage, self, nil, nil)
-                
-            })
+        if(sender == takeButton){
+            //takeImage()
         }
         else if(sender == backButton){
+            cameraSession.stopRunning()
+            
             let main: UIViewController = ViewController()
             main.modalTransitionStyle = UIModalTransitionStyle.FlipHorizontal
             self.presentViewController(main, animated: true, completion: nil)
