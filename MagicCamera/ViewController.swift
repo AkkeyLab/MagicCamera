@@ -13,7 +13,8 @@ import LTMorphingLabel
 class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDelegate, LTMorphingLabelDelegate {
     
     //New BLE
-    var ble_new: Bool = true
+    private var ble_new: Bool = true
+    private var segcon: UISegmentedControl!
     
     //Define
     let UUID_VSP: [CBUUID] = [CBUUID(string: "bd011f22-7d3c-0db6-e441-55873d44ef40")]
@@ -27,6 +28,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     private var ble_characteristic: CBCharacteristic!
     private let nowBLE = NowController()
     private let bleButton: UIButton = UIButton()
+    private let swicth: UISwitch = UISwitch()
     private let bleB    = BLEButton()
     private var bleBool: Bool = false
     
@@ -38,9 +40,13 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     private let mainLabel: LTMorphingLabel = LTMorphingLabel()
     private var outStringCnt = 0
     private var infoLabel: UILabel!
+    private var switchLabel: UILabel!
     
     //Debug
     private var debugButton: UIButton!
+    
+    //Object
+    private let modeSetting = ModeSetting()
     
     
     override func viewDidAppear(animated: Bool) {
@@ -51,9 +57,14 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.whiteColor()
         
-        ble_CentralManager = CBCentralManager(delegate: self, queue: nil, options: [CBCentralManagerOptionShowPowerAlertKey: true])
-        //Indicator
-        indicator.start(self)
+        if modeSetting.getBle() {
+            ble_CentralManager = CBCentralManager(delegate: self, queue: nil, options: [CBCentralManagerOptionShowPowerAlertKey: true])
+            //Indicator
+            indicatorBool = true
+            indicator.start(self)
+        }else{
+            indicatorBool = false
+        }
         
         makeParts()
         bleB.settingButton(self, button: self.bleButton)
@@ -71,10 +82,14 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     }
     
     func onOrientationChange(notification: NSNotification){
-        mainLabel.layer.position = CGPoint(x: self.view.frame.width / 2, y: self.view.frame.height / 3)
-        debugButton.layer.position = CGPoint(x: self.view.frame.width - 50, y: self.view.frame.height - 50)
-        infoLabel.layer.position = CGPoint(x: self.view.frame.width / 2, y: (self.view.frame.height / 2) + 50)
-        bleButton.layer.position = CGPoint(x: 50, y: self.view.frame.height - 50)
+        let x_size = UIScreen.mainScreen().bounds.size.width
+        let y_size = UIScreen.mainScreen().bounds.size.height
+        mainLabel.layer.position = CGPoint(x: x_size / 2, y: y_size / 3)
+        debugButton.layer.position = CGPoint(x: x_size - 50, y: y_size - 50)
+        infoLabel.layer.position = CGPoint(x: x_size / 2, y: (y_size / 2) + 50)
+        bleButton.layer.position = CGPoint(x: 50, y: y_size - 50)
+        segcon.center = CGPoint(x: x_size / 2, y: 50)
+        
         if indicatorBool {
             indicator.activityIndicator.stopAnimating()
             indicator.start(self)
@@ -122,6 +137,36 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         infoLabel.textAlignment = NSTextAlignment.Center
         infoLabel.layer.position = CGPoint(x: self.view.frame.width / 2, y: (self.view.frame.height / 2) + 50)
         self.view.addSubview(infoLabel)
+        
+        let array: NSArray = ["OpenCV","CIFaceFeature"]
+        segcon = UISegmentedControl(items: array as [AnyObject])
+        segcon.center = CGPoint(x: self.view.frame.width / 2, y: 50)
+        segcon.backgroundColor = UIColor.whiteColor()
+        segcon.tintColor = UIColor.blueColor()
+        segcon.addTarget(self, action: "segconChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        if modeSetting.getMode() == "OpenCV" {
+            segcon.selectedSegmentIndex = 0
+        }else{
+            segcon.selectedSegmentIndex = 1
+        }
+        self.view.addSubview(segcon)
+        
+        swicth.layer.position = CGPoint(x: 50, y: 50)
+        swicth.tintColor = UIColor.grayColor()
+        if modeSetting.getBle() {
+            swicth.on = true
+        }else{
+            swicth.on = false
+        }
+        swicth.addTarget(self, action: "onClickSwicth:", forControlEvents: UIControlEvents.ValueChanged)
+        self.view.addSubview(swicth)
+        
+        switchLabel = UILabel(frame: CGRectMake(0, 0, 100, 50))
+        switchLabel.text = "MysticSD"
+        switchLabel.font = UIFont.systemFontOfSize(10)
+        switchLabel.textAlignment = NSTextAlignment.Center
+        switchLabel.layer.position = CGPoint(x: 50, y: 75)
+        self.view.addSubview(switchLabel)
     }
     
     //BLE setting start. ++++++++++++++++++++++++++
@@ -293,11 +338,39 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
                 bleButton.setTitle("-_-", forState: UIControlState.Normal)
                 bleButton.backgroundColor = UIColor.blueColor()
             }else{
-                indicator.activityIndicator.stopAnimating()
+                if modeSetting.getBle() {
+                    indicator.activityIndicator.stopAnimating()
+                }
                 ble_CentralManager = CBCentralManager(delegate: self, queue: nil, options: [CBCentralManagerOptionShowPowerAlertKey: true])
                 //Indicator
                 indicator.start(self)
+                swicth.on = true
+                modeSetting.setBle(true)
             }
+        }
+    }
+    
+    internal func segconChanged(segcon: UISegmentedControl){
+        
+        switch segcon.selectedSegmentIndex {
+        case 0:
+            modeSetting.setMode("OpenCV")
+            
+        case 1:
+            modeSetting.setMode("CIFaceFeature")
+            
+        default:
+            NSLog("Error")
+        }
+    }
+    
+    internal func onClickSwicth(sender: UISwitch){
+        
+        if sender.on {
+            modeSetting.setBle(true)
+        }
+        else {
+            modeSetting.setBle(false)
         }
     }
     

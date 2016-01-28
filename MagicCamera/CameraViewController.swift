@@ -26,6 +26,7 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
     
     //object
     private let nowBLE = NowController()
+    private let modeSetting = ModeSetting()
     
     //private var oneTake: Bool = true
     
@@ -64,7 +65,7 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
         do {
             try cameraDevice.lockForConfiguration()
             
-            cameraDevice.activeVideoMinFrameDuration = CMTimeMake(1, 15)
+            cameraDevice.activeVideoMinFrameDuration = CMTimeMake(1, 15)//one frame 1/15 s -> 1s 15frame
             cameraDevice.unlockForConfiguration()
         } catch let error {
             NSLog("ERROR:\(error)")
@@ -136,34 +137,65 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
             
             self.takeInterval++
             
-            if !self.takePhotoBool && self.takeInterval > 4 {
-                //Image resize
-                //let size = CGSize(width: 36, height: 48) Not recognize and use CPU is (x2 == self).
-                //let size = CGSize(width: 72, height: 96)
-                let size = CGSize(width: image.size.width / 5, height: image.size.height / 5)
-                UIGraphicsBeginImageContext(size)
-                image.drawInRect(CGRectMake(0, 0, size.width, size.height))
-                var resizeImage = UIGraphicsGetImageFromCurrentImageContext()
-                UIGraphicsEndImageContext()
-                
-                //Now orientation
-                let deviceOrientation: UIDeviceOrientation!  = UIDevice.currentDevice().orientation
-                if UIDeviceOrientationIsLandscape(deviceOrientation) {
-                    resizeImage = UIImage(CGImage: resizeImage.CGImage!, scale: 1.0, orientation: UIImageOrientation.Left)
-                }
-                
-                //Face find
-                let faceImage = self.detector.recognizeFace(resizeImage)
-                
-                if faceImage > 0 {
-                    //self.takeImage()
-                    if !self.takePhotoBool {
-                        AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate)) //Vibrate
-                        self.helloPhoto()
-                        self.takePhotoBool = true
+            if self.modeSetting.getMode() == "OpenCV" {
+                if !self.takePhotoBool && self.takeInterval > 4 {
+                    //Image resize
+                    //let size = CGSize(width: 36, height: 48) Not recognize and use CPU is (x2 == self).
+                    //let size = CGSize(width: 72, height: 96)
+                    let size = CGSize(width: image.size.width / 5, height: image.size.height / 5)
+                    UIGraphicsBeginImageContext(size)
+                    image.drawInRect(CGRectMake(0, 0, size.width, size.height))
+                    var resizeImage = UIGraphicsGetImageFromCurrentImageContext()
+                    UIGraphicsEndImageContext()
+                    
+                    //Now orientation
+                    let deviceOrientation: UIDeviceOrientation!  = UIDevice.currentDevice().orientation
+                    if UIDeviceOrientationIsLandscape(deviceOrientation) {
+                        resizeImage = UIImage(CGImage: resizeImage.CGImage!, scale: 1.0, orientation: UIImageOrientation.Left)
                     }
+                    
+                    //Face find
+                    let faceImage = self.detector.recognizeFace(resizeImage)
+                    
+                    if faceImage > 0 {
+                        //self.takeImage()
+                        if !self.takePhotoBool {
+                            AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate)) //Vibrate
+                            self.helloPhoto()
+                            self.takePhotoBool = true
+                        }
+                    }
+                    self.takeInterval = 0
                 }
-                self.takeInterval = 0
+            }else{
+                if !self.takePhotoBool && self.takeInterval > 4 {
+                    //Image resize
+                    //let size = CGSize(width: 36, height: 48) Not recognize and use CPU is (x2 == self).
+                    //let size = CGSize(width: 72, height: 96)
+                    let size = CGSize(width: image.size.width / 5, height: image.size.height / 5)
+                    UIGraphicsBeginImageContext(size)
+                    image.drawInRect(CGRectMake(0, 0, size.width, size.height))
+                    let resizeImage = UIGraphicsGetImageFromCurrentImageContext()
+                    UIGraphicsEndImageContext()
+                    
+                    let options : NSDictionary = NSDictionary(object: CIDetectorAccuracyHigh, forKey: CIDetectorAccuracy)
+                    let detector : CIDetector = CIDetector(ofType: CIDetectorTypeFace, context: nil, options: options as? [String : AnyObject])
+                    let faces : NSArray = detector.featuresInImage(CIImage(image: resizeImage)!)
+                    var outcnt: Int = 0
+                    for _ in faces {
+                        outcnt++
+                    }
+                    if outcnt != 0 {
+                        //self.takeImage()
+                        if !self.takePhotoBool {
+                            AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate)) //Vibrate
+                            self.helloPhoto()
+                            self.takePhotoBool = true
+                        }
+                    }
+                    
+                    self.takeInterval = 0
+                }
             }
         })
     }
@@ -197,7 +229,7 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
         
         if photo != nil {
             if UIDeviceOrientationIsLandscape(deviceOrientation) {
-                photo = UIImage(CGImage: photo.CGImage!, scale: 1.0, orientation: UIImageOrientation.Left)
+                //photo = UIImage(CGImage: photo.CGImage!, scale: 1.0, orientation: UIImageOrientation.Left)
             }
             AudioServicesPlaySystemSound(1108)
             UIImageWriteToSavedPhotosAlbum(photo, self, nil, nil)
