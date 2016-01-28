@@ -368,6 +368,9 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         
         if sender.on {
             modeSetting.setBle(true)
+            //Indicator
+            indicatorBool = true
+            indicator.start(self)
         }
         else {
             modeSetting.setBle(false)
