@@ -22,12 +22,13 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     
     private var passIndicator: Bool = false
     //BLE
-    private var ble_Uuids: NSMutableArray = NSMutableArray()
-    private var ble_Names: NSMutableArray = NSMutableArray()
-    private var ble_Peripheral: NSMutableArray = NSMutableArray()
-    
     private var ble_CentralManager: CBCentralManager!
     private var ble_TargetPeripheral: CBPeripheral!
+    private var ble_characteristic: CBCharacteristic!
+    private let nowBLE = NowController()
+    private let bleButton: UIButton = UIButton()
+    private let bleB    = BLEButton()
+    private var bleBool: Bool = false
     
     //Indicator
     private let indicator = ActivityIndicator()
@@ -36,6 +37,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     //Text
     private let mainLabel: LTMorphingLabel = LTMorphingLabel()
     private var outStringCnt = 0
+    private var infoLabel: UILabel!
     
     //Debug
     private var debugButton: UIButton!
@@ -49,15 +51,16 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.whiteColor()
         
-        ble_CentralManager = CBCentralManager(delegate: self, queue: nil, options: nil)
+        ble_CentralManager = CBCentralManager(delegate: self, queue: nil, options: [CBCentralManagerOptionShowPowerAlertKey: true])
         //Indicator
         indicator.start(self)
         
         makeParts()
+        bleB.settingButton(self, button: self.bleButton)
     }
     
     func outString(){
-        var textArray = ["MagicCamera", "will work", "in conjunction with", "MysticSD"]
+        var textArray = ["MagicCamera", "will work", "in conjunction with", "MysticSD."]
         mainLabel.text = textArray[outStringCnt]
         
         if outStringCnt == 3 {
@@ -70,9 +73,21 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     func onOrientationChange(notification: NSNotification){
         mainLabel.layer.position = CGPoint(x: self.view.frame.width / 2, y: self.view.frame.height / 3)
         debugButton.layer.position = CGPoint(x: self.view.frame.width - 50, y: self.view.frame.height - 50)
+        infoLabel.layer.position = CGPoint(x: self.view.frame.width / 2, y: (self.view.frame.height / 2) + 50)
+        bleButton.layer.position = CGPoint(x: 50, y: self.view.frame.height - 50)
         if indicatorBool {
             indicator.activityIndicator.stopAnimating()
             indicator.start(self)
+        }
+        
+        //Now orientation
+        let deviceOrientation: UIDeviceOrientation!  = UIDevice.currentDevice().orientation
+        if UIDeviceOrientationIsPortrait(deviceOrientation) {
+            infoLabel.text = "FaceTime camera mode"
+        }else if UIDeviceOrientationIsLandscape(deviceOrientation) {
+            infoLabel.text = "iSight camera mode"
+        }else{
+            infoLabel.text = "FaceTime camera mode"
         }
     }
 
@@ -95,12 +110,18 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         debugButton.frame = CGRectMake(0, 0, 50, 50)
         debugButton.backgroundColor = UIColor.grayColor()
         debugButton.layer.masksToBounds = true
-        debugButton.setTitle("＊", forState: UIControlState.Normal)
+        debugButton.setTitle("GO", forState: UIControlState.Normal)
         debugButton.layer.cornerRadius = 10.0
         debugButton.layer.position = CGPoint(x: self.view.frame.width - 50, y: self.view.frame.height - 50)
         debugButton.alpha = 0.7
         debugButton.addTarget(self, action: "onClickButton:", forControlEvents: .TouchUpInside)
         self.view.addSubview(debugButton)
+        
+        infoLabel = UILabel(frame: CGRectMake(0, 0, 200, 50))
+        infoLabel.text = "FaceTime camera mode"
+        infoLabel.textAlignment = NSTextAlignment.Center
+        infoLabel.layer.position = CGPoint(x: self.view.frame.width / 2, y: (self.view.frame.height / 2) + 50)
+        self.view.addSubview(infoLabel)
     }
     
     //BLE setting start. ++++++++++++++++++++++++++
@@ -108,25 +129,16 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         switch(central.state){
         case .PoweredOff:
             NSLog("Bluetooth OFF")
-            alert("Bluetooth OFF",messageString: "設定でBluetoothをオンにしてください", buttonString: "OK")
-            //Setting open
-            //let url = NSURL(string: UIApplicationOpenSettingsURLString)
-            //UIApplication.sharedApplication().openURL(url!)
         case .PoweredOn:
-            NSLog("Bluetooth ON")
             //BLE Start
             ble_CentralManager.scanForPeripheralsWithServices(UUID_VSP, options: nil)
         case .Resetting:
-            NSLog("Resetting")
             alert("Resetting",messageString: "開発担当までご連絡ください", buttonString: "OK")
         case .Unauthorized:
-            NSLog("Unauthorized")
             alert("Unauthorized",messageString: "開発担当までご連絡ください", buttonString: "OK")
         case .Unknown:
-            NSLog("Unknown")
             alert("Unknown",messageString: "開発担当までご連絡ください", buttonString: "OK")
         case .Unsupported:
-            NSLog("Unsupported")
             alert("Unsupported",messageString: "お使いの端末はBluetooth非対応です", buttonString: "OK")
         }
     }
@@ -135,21 +147,12 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         advertisementData: [String: AnyObject], RSSI: NSNumber) {
             //NSLog("centralManager")
             
-            var name:NSString? = advertisementData["kCBAdvDataLocalName"] as? NSString
-            if(name == nil){
-                name = "No name"
-            }
-            ble_Names.addObject(name!)
-            ble_Peripheral.addObject(peripheral)
-            ble_Uuids.addObject(peripheral.identifier.UUIDString)
+            let name:NSString? = advertisementData["kCBAdvDataLocalName"] as? NSString
             
             if name == "BLESerial2" {
                 //Indicator stop
                 indicator.activityIndicator.stopAnimating()
                 indicatorBool = false
-                
-                //View remove
-                //removeAllSubviews(self.view, kind: "ble_start")
                 
                 //Start connect
                 self.ble_TargetPeripheral = peripheral
@@ -163,14 +166,20 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         //showNotification("MysticSDとの接続に成功しました！")//MapCoreViewController class
         ble_CentralManager.stopScan()
         
+        bleBool = true
+        bleButton.setTitle("^_^", forState: UIControlState.Normal)
+        bleButton.backgroundColor = UIColor.redColor()
+        
         //Find characteristics -> Go to "Find "Service" !"
         peripheral.delegate = self;
-        peripheral.discoverServices(nil)
+        peripheral.discoverServices(UUID_VSP)
         
     }
     
     func centralManager(central: CBCentralManager, didFailToConnectPeripheral peripheral: CBPeripheral, error: NSError?) {
         //showNotification("MysticSDとの接続に失敗しました！")//MapCoreViewController class
+        alert("Error",messageString: "MysticSDとの接続に失敗しました", buttonString: "OK")
+        ble_CentralManager.stopScan()
     }
     
     //Find "Service" !
@@ -210,7 +219,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
                 // move to "First write result"
                 //peripheral.readValueForCharacteristic(characteristic) // Read only once
                 peripheral.setNotifyValue(true, forCharacteristic: characteristic) // Notify
-                
+                ble_characteristic = characteristic
             }
         }
     }
@@ -232,13 +241,16 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
             let data = characteristic.value
             let ptr = UnsafePointer<UInt8>(characteristic.value!.bytes)
             let bytes = UnsafeBufferPointer<UInt8>(start:ptr, count:data!.length)
-            NSLog("Read value: \(bytes[0])")
+            //NSLog("Read value: \(bytes[0])")
             
             if(bytes[0] == 1){
-                bootCamera()
+                //ble_CentralManager.cancelPeripheralConnection(peripheral)
+                
+                if nowBLE.getNowBLE() {
+                    bootCamera()
+                }
             }
         }
-        
     }
     
     //First write result
@@ -255,17 +267,17 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     
         if UIDeviceOrientationIsLandscape(deviceOrientation) {
             let camera: UIViewController = BackCameraMode()
-            camera.modalTransitionStyle = UIModalTransitionStyle.PartialCurl
+            camera.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
             self.presentViewController(camera, animated: true, completion: nil)
             
         }else
         if UIDeviceOrientationIsPortrait(deviceOrientation){
             let camera: UIViewController = FrontCameraMode()
-            camera.modalTransitionStyle = UIModalTransitionStyle.PartialCurl
+            camera.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
             self.presentViewController(camera, animated: true, completion: nil)
         }else{
             let camera: UIViewController = FrontCameraMode()
-            camera.modalTransitionStyle = UIModalTransitionStyle.PartialCurl
+            camera.modalTransitionStyle = UIModalTransitionStyle.CoverVertical
             self.presentViewController(camera, animated: true, completion: nil)
         }
     }
@@ -273,7 +285,19 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     internal func onClickButton(sender: UIButton){
         if sender == debugButton {
             bootCamera()
-            NSLog("Boot")
+        }else if(sender == bleButton){
+            if bleBool {
+                ble_TargetPeripheral.setNotifyValue(false, forCharacteristic: ble_characteristic) //cut notification
+                ble_CentralManager.cancelPeripheralConnection(ble_TargetPeripheral) //cut ble
+                bleBool = false
+                bleButton.setTitle("-_-", forState: UIControlState.Normal)
+                bleButton.backgroundColor = UIColor.blueColor()
+            }else{
+                indicator.activityIndicator.stopAnimating()
+                ble_CentralManager = CBCentralManager(delegate: self, queue: nil, options: [CBCentralManagerOptionShowPowerAlertKey: true])
+                //Indicator
+                indicator.start(self)
+            }
         }
     }
     

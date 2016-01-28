@@ -16,6 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        //Splash time
+        sleep(1)
         // Override point for customization after application launch.
         
         let main: ViewController = ViewController()
