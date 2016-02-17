@@ -9,8 +9,9 @@
 import UIKit
 import CoreBluetooth
 import LTMorphingLabel
+import AVFoundation
 
-class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDelegate, LTMorphingLabelDelegate {
+class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, LTMorphingLabelDelegate {
     
     //New BLE
     private var ble_new: Bool = true
@@ -47,6 +48,8 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     
     //Object
     private let modeSetting = ModeSetting()
+    
+    private var addImageButton: UIButton!
     
     
     override func viewDidAppear(animated: Bool) {
@@ -89,6 +92,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         infoLabel.layer.position = CGPoint(x: x_size / 2, y: (y_size / 2) + 50)
         bleButton.layer.position = CGPoint(x: 50, y: y_size - 50)
         segcon.center = CGPoint(x: x_size / 2, y: 50)
+        addImageButton.layer.position = CGPoint(x: x_size - 50, y: 50)
         
         if indicatorBool {
             indicator.activityIndicator.stopAnimating()
@@ -167,6 +171,11 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         switchLabel.textAlignment = NSTextAlignment.Center
         switchLabel.layer.position = CGPoint(x: 50, y: 75)
         self.view.addSubview(switchLabel)
+        
+        addImageButton = UIButton(type: UIButtonType.ContactAdd)
+        addImageButton.layer.position = CGPoint(x: self.view.frame.width - 50, y: 50)
+        addImageButton.addTarget(self, action: "onClickButton:", forControlEvents: .TouchUpInside)
+        self.view.addSubview(addImageButton)
     }
     
     //BLE setting start. ++++++++++++++++++++++++++
@@ -330,6 +339,8 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     internal func onClickButton(sender: UIButton){
         if sender == debugButton {
             bootCamera()
+        }else if(sender == addImageButton){
+            usePicker()
         }else if(sender == bleButton){
             if bleBool {
                 ble_TargetPeripheral.setNotifyValue(false, forCharacteristic: ble_characteristic) //cut notification
@@ -348,6 +359,53 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
                 modeSetting.setBle(true)
             }
         }
+    }
+    
+    func usePicker(){
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.PhotoLibrary) {
+            let controller = UIImagePickerController()
+            controller.delegate = self
+            controller.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+            controller.allowsEditing = false
+            self.presentViewController(controller, animated: true, completion: nil)
+        }
+    }
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    //func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, info: [String : AnyObject]?) {
+        if info[UIImagePickerControllerOriginalImage] != nil {
+            let image = info[UIImagePickerControllerOriginalImage] as! UIImage
+            //!! Option is CIDetectorAccuracy**
+            let options : NSDictionary = NSDictionary(object: CIDetectorAccuracyHigh, forKey: CIDetectorAccuracy)
+            let detector : CIDetector = CIDetector(ofType: CIDetectorTypeFace, context: nil, options: options as? [String : AnyObject])
+            let faces : NSArray = detector.featuresInImage(CIImage(image: image)!)
+            
+            //point
+            var transform : CGAffineTransform = CGAffineTransformMakeScale(1, -1)
+            transform = CGAffineTransformTranslate(transform, 0, -image.size.height)
+            
+            var outcnt: Int = 0
+            var outImage: UIImage = image
+            //mark output
+            let feature : CIFaceFeature = CIFaceFeature()
+            for feature in faces {
+                outcnt++
+                let faceRect : CGRect = CGRectApplyAffineTransform(feature.bounds, transform)
+                let faceOutlineImage = UIImage(named: "ios_face.png")
+                
+                UIGraphicsBeginImageContext(CGSizeMake(image.size.width, image.size.height))
+                image.drawAtPoint(CGPointMake(0, 0))
+                faceOutlineImage!.drawInRect(faceRect)
+                outImage = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
+            }
+            
+            if outcnt != 0 {
+                UIImageWriteToSavedPhotosAlbum(outImage, self, nil, nil)
+                AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate)) //Vibrate
+            }
+        }
+        picker.dismissViewControllerAnimated(true, completion: nil)
     }
     
     internal func segconChanged(segcon: UISegmentedControl){

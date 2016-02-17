@@ -9,6 +9,7 @@
 
 - (id)init;
 //- (UIImage *)recognizeFace:(UIImage *)image;
-- (int)recognizeFace:(UIImage *)image;
+- (UIImage *)recognizeFace:(UIImage *)image;
+- (int)returnFace;
 
 @end

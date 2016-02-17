@@ -145,24 +145,29 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
                     let size = CGSize(width: image.size.width / 5, height: image.size.height / 5)
                     UIGraphicsBeginImageContext(size)
                     image.drawInRect(CGRectMake(0, 0, size.width, size.height))
-                    var resizeImage = UIGraphicsGetImageFromCurrentImageContext()
+                    let resizeImage = UIGraphicsGetImageFromCurrentImageContext()
                     UIGraphicsEndImageContext()
                     
+                    /*
                     //Now orientation
                     let deviceOrientation: UIDeviceOrientation!  = UIDevice.currentDevice().orientation
                     if UIDeviceOrientationIsLandscape(deviceOrientation) {
                         resizeImage = UIImage(CGImage: resizeImage.CGImage!, scale: 1.0, orientation: UIImageOrientation.Left)
                     }
+                    */
                     
                     //Face find
                     let faceImage = self.detector.recognizeFace(resizeImage)
+                    let boolPoint = self.detector.returnFace()
                     
-                    if faceImage > 0 {
+                    if boolPoint > 0 {
                         //self.takeImage()
                         if !self.takePhotoBool {
                             AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate)) //Vibrate
                             self.helloPhoto()
                             self.takePhotoBool = true
+                            
+                            UIImageWriteToSavedPhotosAlbum(faceImage, self, nil, nil)
                         }
                     }
                     self.takeInterval = 0
@@ -178,19 +183,48 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
                     let resizeImage = UIGraphicsGetImageFromCurrentImageContext()
                     UIGraphicsEndImageContext()
                     
+                    //!! Option is CIDetectorAccuracy**
                     let options : NSDictionary = NSDictionary(object: CIDetectorAccuracyHigh, forKey: CIDetectorAccuracy)
                     let detector : CIDetector = CIDetector(ofType: CIDetectorTypeFace, context: nil, options: options as? [String : AnyObject])
                     let faces : NSArray = detector.featuresInImage(CIImage(image: resizeImage)!)
+                    
+                    //point
+                    var transform : CGAffineTransform = CGAffineTransformMakeScale(1, -1)
+                    transform = CGAffineTransformTranslate(transform, 0, -resizeImage.size.height)
+                    
                     var outcnt: Int = 0
-                    for _ in faces {
+                    var outImage: UIImage = resizeImage
+                    
+                    //mark output
+                    let feature : CIFaceFeature = CIFaceFeature()
+                    for feature in faces {
                         outcnt++
+                        
+                        let faceRect : CGRect = CGRectApplyAffineTransform(feature.bounds, transform)
+                        
+                        let faceOutline = UIView(frame: faceRect)
+                        faceOutline.layer.borderWidth = 1
+                        faceOutline.layer.borderColor = UIColor.redColor().CGColor
+                        
+                        //let faceOutlineImage = self.getUIImageFromUIView(faceOutline)
+                        let faceOutlineImage = UIImage(named: "ios_face.png")
+                        
+                        UIGraphicsBeginImageContext(CGSizeMake(resizeImage.size.width, resizeImage.size.height))
+                        resizeImage.drawAtPoint(CGPointMake(0, 0))
+                        faceOutlineImage!.drawInRect(faceRect)
+                        outImage = UIGraphicsGetImageFromCurrentImageContext()
+                        UIGraphicsEndImageContext()
                     }
+                    
+                    //take
                     if outcnt != 0 {
                         //self.takeImage()
                         if !self.takePhotoBool {
                             AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate)) //Vibrate
                             self.helloPhoto()
                             self.takePhotoBool = true
+                            
+                            UIImageWriteToSavedPhotosAlbum(outImage, self, nil, nil)
                         }
                     }
                     
@@ -198,6 +232,17 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
                 }
             }
         })
+    }
+    
+    //UIView -> UIImage
+    func getUIImageFromUIView(myUIView:UIView) ->UIImage {
+        UIGraphicsBeginImageContextWithOptions(myUIView.frame.size, true, 0);
+        let context:CGContextRef = UIGraphicsGetCurrentContext()!;
+        CGContextTranslateCTM(context, -myUIView.frame.origin.x, -myUIView.frame.origin.y);
+        myUIView.layer.renderInContext(context);
+        let renderedImage:UIImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        return renderedImage;
     }
     
     func helloPhoto(){

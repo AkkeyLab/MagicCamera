@@ -11,6 +11,8 @@
 #import <opencv2/opencv.hpp>
 #import <opencv2/highgui/ios.h>
 
+int returnPoint = 0;
+
 @interface Detector()
 {
     cv::CascadeClassifier cascade;
@@ -18,6 +20,11 @@
 @end
 
 @implementation Detector: NSObject
+
+- (int)returnFace {
+    
+    return returnPoint;
+}
 
 - (id)init {
     self = [super init];
@@ -35,7 +42,7 @@
 }
 
 //- (UIImage *)recognizeFace:(UIImage *)image {
-- (int)recognizeFace:(UIImage *)image {
+- (UIImage *)recognizeFace:(UIImage *)image {
     // UIImage -> cv::Mat変換
     CGColorSpaceRef colorSpace = CGImageGetColorSpace(image.CGImage);
     CGFloat cols = image.size.width;
@@ -62,11 +69,13 @@
                              1.1, 2,
                              CV_HAAR_SCALE_IMAGE,
                              cv::Size(30, 30));
-    /*
+    
+    returnPoint = 0;
+    
     // 顔の位置に丸を描く
     std::vector<cv::Rect>::const_iterator r = faces.begin();
     for(; r != faces.end(); ++r) {
-        NSLog(@"test");
+        returnPoint++;
         cv::Point center;
         int radius;
         center.x = cv::saturate_cast<int>((r->x + r->width*0.5));
@@ -79,27 +88,7 @@
     UIImage *resultImage = MatToUIImage(mat);
     
     return resultImage;
-    */
-    // 顔の位置に丸を描く
-    int returnValue = 0;
     
-    std::vector<cv::Rect>::const_iterator r = faces.begin();
-    for(; r != faces.end(); ++r) {
-        returnValue++;
-        /*
-        cv::Point center;
-        int radius;
-        center.x = cv::saturate_cast<int>((r->x + r->width*0.5));
-        center.y = cv::saturate_cast<int>((r->y + r->height*0.5));
-        radius = cv::saturate_cast<int>((r->width + r->height) / 2);
-        cv::circle(mat, center, radius, cv::Scalar(80,80,255), 3, 8, 0 );
-        */
-    }
-    
-    // cv::Mat -> UIImage変換
-    //UIImage *resultImage = MatToUIImage(mat);
-    
-    return returnValue;
 }
 
 @end
