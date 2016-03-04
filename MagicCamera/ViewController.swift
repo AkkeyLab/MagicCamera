@@ -374,7 +374,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
     //func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, info: [String : AnyObject]?) {
         if info[UIImagePickerControllerOriginalImage] != nil {
-            let image = info[UIImagePickerControllerOriginalImage] as! UIImage
+            var image = info[UIImagePickerControllerOriginalImage] as! UIImage
             //!! Option is CIDetectorAccuracy**
             let options : NSDictionary = NSDictionary(object: CIDetectorAccuracyHigh, forKey: CIDetectorAccuracy)
             let detector : CIDetector = CIDetector(ofType: CIDetectorTypeFace, context: nil, options: options as? [String : AnyObject])
@@ -385,7 +385,6 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
             transform = CGAffineTransformTranslate(transform, 0, -image.size.height)
             
             var outcnt: Int = 0
-            var outImage: UIImage = image
             //mark output
             let feature : CIFaceFeature = CIFaceFeature()
             for feature in faces {
@@ -396,12 +395,12 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
                 UIGraphicsBeginImageContext(CGSizeMake(image.size.width, image.size.height))
                 image.drawAtPoint(CGPointMake(0, 0))
                 faceOutlineImage!.drawInRect(faceRect)
-                outImage = UIGraphicsGetImageFromCurrentImageContext()
+                image = UIGraphicsGetImageFromCurrentImageContext()
                 UIGraphicsEndImageContext()
             }
             
             if outcnt != 0 {
-                UIImageWriteToSavedPhotosAlbum(outImage, self, nil, nil)
+                UIImageWriteToSavedPhotosAlbum(image, self, nil, nil)
                 AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate)) //Vibrate
             }
         }

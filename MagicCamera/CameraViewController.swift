@@ -180,7 +180,7 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
                     let size = CGSize(width: image.size.width / 5, height: image.size.height / 5)
                     UIGraphicsBeginImageContext(size)
                     image.drawInRect(CGRectMake(0, 0, size.width, size.height))
-                    let resizeImage = UIGraphicsGetImageFromCurrentImageContext()
+                    var resizeImage = UIGraphicsGetImageFromCurrentImageContext()
                     UIGraphicsEndImageContext()
                     
                     //!! Option is CIDetectorAccuracy**
@@ -193,7 +193,6 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
                     transform = CGAffineTransformTranslate(transform, 0, -resizeImage.size.height)
                     
                     var outcnt: Int = 0
-                    var outImage: UIImage = resizeImage
                     
                     //mark output
                     let feature : CIFaceFeature = CIFaceFeature()
@@ -212,7 +211,7 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
                         UIGraphicsBeginImageContext(CGSizeMake(resizeImage.size.width, resizeImage.size.height))
                         resizeImage.drawAtPoint(CGPointMake(0, 0))
                         faceOutlineImage!.drawInRect(faceRect)
-                        outImage = UIGraphicsGetImageFromCurrentImageContext()
+                        resizeImage = UIGraphicsGetImageFromCurrentImageContext()
                         UIGraphicsEndImageContext()
                     }
                     
@@ -224,7 +223,7 @@ class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBuff
                             self.helloPhoto()
                             self.takePhotoBool = true
                             
-                            UIImageWriteToSavedPhotosAlbum(outImage, self, nil, nil)
+                            UIImageWriteToSavedPhotosAlbum(resizeImage, self, nil, nil)
                         }
                     }
                     
