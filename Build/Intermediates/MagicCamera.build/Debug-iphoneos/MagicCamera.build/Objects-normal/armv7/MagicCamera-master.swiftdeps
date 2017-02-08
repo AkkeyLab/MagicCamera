@@ -1,7 +1,0 @@
-version: "Apple Swift version 2.1 (swiftlang-700.1.101.6 clang-700.1.76)"
-options: "2cd3f179dad7ab65e31bc554eecf8f66"
-build_time: [505418508, 143469000]
-inputs:
-  "/Users/AKIO/Documents/Program/Xcode/MagicCamera/MagicCamera/AppDelegate.swift": [504253172, 0]
-  "/Users/AKIO/Documents/Program/Xcode/MagicCamera/MagicCamera/ViewController.swift": [504259844, 0]
-  "/Users/AKIO/Documents/Program/Xcode/MagicCamera/MagicCamera/CameraViewController.swift": [504258477, 0]

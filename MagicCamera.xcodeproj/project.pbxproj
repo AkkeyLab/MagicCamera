@@ -16,10 +16,18 @@
 		661A71AD1C2BC17A000DEAAA /* MagicCameraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 661A71AC1C2BC17A000DEAAA /* MagicCameraTests.swift */; };
 		661A71B81C2BC17A000DEAAA /* MagicCameraUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 661A71B71C2BC17A000DEAAA /* MagicCameraUITests.swift */; };
 		661A71C61C2BC497000DEAAA /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 661A71C51C2BC497000DEAAA /* CameraViewController.swift */; };
+		661B08121C401B7D00265230 /* CameraUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 661B08111C401B7D00265230 /* CameraUtil.swift */; };
+		661B9C9D1C5A64BE001FCAE4 /* ModeSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 661B9C9C1C5A64BE001FCAE4 /* ModeSetting.swift */; };
+		664EE8731C73908B006235CA /* ios_face.png in Resources */ = {isa = PBXBuildFile; fileRef = 664EE8721C73908B006235CA /* ios_face.png */; };
+		668898141C58912300583D81 /* NowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668898131C58912300583D81 /* NowController.swift */; };
 		668FEB9B1C3E04B5002C40D3 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668FEB9A1C3E04B5002C40D3 /* ActivityIndicator.swift */; };
 		668FEB9D1C3E0CEB002C40D3 /* FrontCameraMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668FEB9C1C3E0CEB002C40D3 /* FrontCameraMode.swift */; };
 		668FEB9F1C3E0D73002C40D3 /* BackCameraMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668FEB9E1C3E0D73002C40D3 /* BackCameraMode.swift */; };
-		82DB443310AFCFC76BE37209 /* Pods_MagicCamera.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC3160595F3B9EF3A5170C75 /* Pods_MagicCamera.framework */; };
+		668FEBA71C3E37ED002C40D3 /* Detector.mm in Sources */ = {isa = PBXBuildFile; fileRef = 668FEBA51C3E37ED002C40D3 /* Detector.mm */; };
+		668FEBA91C3E5BD2002C40D3 /* haarcascade_frontalface_alt.xml in Resources */ = {isa = PBXBuildFile; fileRef = 668FEBA81C3E5BD2002C40D3 /* haarcascade_frontalface_alt.xml */; };
+		66C25E9B1C594AAA008EBA35 /* MagicCamera_icon_K.png in Resources */ = {isa = PBXBuildFile; fileRef = 66C25E9A1C594AAA008EBA35 /* MagicCamera_icon_K.png */; };
+		66C25E9D1C594D7F008EBA35 /* BLEButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C25E9C1C594D7F008EBA35 /* BLEButton.swift */; };
+		DACDDEED6DA6C81ACFEAE462 /* Pods_MagicCamera.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 746337B5265F9464F0CBA2DB /* Pods_MagicCamera.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,12 +63,21 @@
 		661A71B71C2BC17A000DEAAA /* MagicCameraUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagicCameraUITests.swift; sourceTree = "<group>"; };
 		661A71B91C2BC17A000DEAAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		661A71C51C2BC497000DEAAA /* CameraViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
+		661B08111C401B7D00265230 /* CameraUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraUtil.swift; sourceTree = "<group>"; };
+		661B9C9C1C5A64BE001FCAE4 /* ModeSetting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModeSetting.swift; sourceTree = "<group>"; };
+		664EE8721C73908B006235CA /* ios_face.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ios_face.png; sourceTree = "<group>"; };
+		668898131C58912300583D81 /* NowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NowController.swift; sourceTree = "<group>"; };
 		668FEB9A1C3E04B5002C40D3 /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		668FEB9C1C3E0CEB002C40D3 /* FrontCameraMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrontCameraMode.swift; sourceTree = "<group>"; };
 		668FEB9E1C3E0D73002C40D3 /* BackCameraMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackCameraMode.swift; sourceTree = "<group>"; };
+		668FEBA41C3E37EC002C40D3 /* MagicCamera-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MagicCamera-Bridging-Header.h"; sourceTree = "<group>"; };
+		668FEBA51C3E37ED002C40D3 /* Detector.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Detector.mm; sourceTree = "<group>"; };
+		668FEBA81C3E5BD2002C40D3 /* haarcascade_frontalface_alt.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = haarcascade_frontalface_alt.xml; sourceTree = "<group>"; };
+		66C25E9A1C594AAA008EBA35 /* MagicCamera_icon_K.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MagicCamera_icon_K.png; sourceTree = "<group>"; };
+		66C25E9C1C594D7F008EBA35 /* BLEButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEButton.swift; sourceTree = "<group>"; };
+		746337B5265F9464F0CBA2DB /* Pods_MagicCamera.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MagicCamera.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A9F7D692F954DBB838FD8DA /* Pods-MagicCamera.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MagicCamera.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MagicCamera/Pods-MagicCamera.debug.xcconfig"; sourceTree = "<group>"; };
 		CEBC8A89E964840E98DA8D48 /* Pods-MagicCamera.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MagicCamera.release.xcconfig"; path = "Pods/Target Support Files/Pods-MagicCamera/Pods-MagicCamera.release.xcconfig"; sourceTree = "<group>"; };
-		EC3160595F3B9EF3A5170C75 /* Pods_MagicCamera.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MagicCamera.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,7 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				82DB443310AFCFC76BE37209 /* Pods_MagicCamera.framework in Frameworks */,
+				DACDDEED6DA6C81ACFEAE462 /* Pods_MagicCamera.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,7 +109,7 @@
 		0BFC1AFD97C68CECF49B4C41 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				EC3160595F3B9EF3A5170C75 /* Pods_MagicCamera.framework */,
+				746337B5265F9464F0CBA2DB /* Pods_MagicCamera.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -122,17 +139,17 @@
 		661A71931C2BC17A000DEAAA /* MagicCamera */ = {
 			isa = PBXGroup;
 			children = (
-				668FEB9A1C3E04B5002C40D3 /* ActivityIndicator.swift */,
+				66C25E991C594A90008EBA35 /* image */,
 				661A71941C2BC17A000DEAAA /* AppDelegate.swift */,
-				661A71961C2BC17A000DEAAA /* ViewController.swift */,
+				661B08161C403C3400265230 /* Parts */,
+				661B08151C403C0800265230 /* Body */,
+				661B08141C403BC600265230 /* OpenCV */,
+				661B08131C403BB600265230 /* Camera */,
 				661A71981C2BC17A000DEAAA /* Main.storyboard */,
 				661A719E1C2BC17A000DEAAA /* Assets.xcassets */,
 				661A71A01C2BC17A000DEAAA /* LaunchScreen.storyboard */,
 				661A71A31C2BC17A000DEAAA /* Info.plist */,
 				661A719B1C2BC17A000DEAAA /* MagicCamera.xcdatamodeld */,
-				661A71C51C2BC497000DEAAA /* CameraViewController.swift */,
-				668FEB9C1C3E0CEB002C40D3 /* FrontCameraMode.swift */,
-				668FEB9E1C3E0D73002C40D3 /* BackCameraMode.swift */,
 			);
 			path = MagicCamera;
 			sourceTree = "<group>";
@@ -153,6 +170,55 @@
 				661A71B91C2BC17A000DEAAA /* Info.plist */,
 			);
 			path = MagicCameraUITests;
+			sourceTree = "<group>";
+		};
+		661B08131C403BB600265230 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				661B08111C401B7D00265230 /* CameraUtil.swift */,
+				661A71C51C2BC497000DEAAA /* CameraViewController.swift */,
+				668FEB9C1C3E0CEB002C40D3 /* FrontCameraMode.swift */,
+				668FEB9E1C3E0D73002C40D3 /* BackCameraMode.swift */,
+			);
+			name = Camera;
+			sourceTree = "<group>";
+		};
+		661B08141C403BC600265230 /* OpenCV */ = {
+			isa = PBXGroup;
+			children = (
+				668FEBA51C3E37ED002C40D3 /* Detector.mm */,
+				668FEBA41C3E37EC002C40D3 /* MagicCamera-Bridging-Header.h */,
+				668FEBA81C3E5BD2002C40D3 /* haarcascade_frontalface_alt.xml */,
+			);
+			name = OpenCV;
+			sourceTree = "<group>";
+		};
+		661B08151C403C0800265230 /* Body */ = {
+			isa = PBXGroup;
+			children = (
+				66C25E9C1C594D7F008EBA35 /* BLEButton.swift */,
+				661A71961C2BC17A000DEAAA /* ViewController.swift */,
+				668898131C58912300583D81 /* NowController.swift */,
+				661B9C9C1C5A64BE001FCAE4 /* ModeSetting.swift */,
+			);
+			name = Body;
+			sourceTree = "<group>";
+		};
+		661B08161C403C3400265230 /* Parts */ = {
+			isa = PBXGroup;
+			children = (
+				668FEB9A1C3E04B5002C40D3 /* ActivityIndicator.swift */,
+			);
+			name = Parts;
+			sourceTree = "<group>";
+		};
+		66C25E991C594A90008EBA35 /* image */ = {
+			isa = PBXGroup;
+			children = (
+				664EE8721C73908B006235CA /* ios_face.png */,
+				66C25E9A1C594AAA008EBA35 /* MagicCamera_icon_K.png */,
+			);
+			name = image;
 			sourceTree = "<group>";
 		};
 		6D79EC0562A363FD39EF1CA5 /* Pods */ = {
@@ -274,6 +340,9 @@
 			files = (
 				661A71A21C2BC17A000DEAAA /* LaunchScreen.storyboard in Resources */,
 				661A719F1C2BC17A000DEAAA /* Assets.xcassets in Resources */,
+				664EE8731C73908B006235CA /* ios_face.png in Resources */,
+				66C25E9B1C594AAA008EBA35 /* MagicCamera_icon_K.png in Resources */,
+				668FEBA91C3E5BD2002C40D3 /* haarcascade_frontalface_alt.xml in Resources */,
 				661A719A1C2BC17A000DEAAA /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -347,9 +416,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				668898141C58912300583D81 /* NowController.swift in Sources */,
+				661B08121C401B7D00265230 /* CameraUtil.swift in Sources */,
 				668FEB9F1C3E0D73002C40D3 /* BackCameraMode.swift in Sources */,
+				66C25E9D1C594D7F008EBA35 /* BLEButton.swift in Sources */,
 				661A71971C2BC17A000DEAAA /* ViewController.swift in Sources */,
+				668FEBA71C3E37ED002C40D3 /* Detector.mm in Sources */,
 				668FEB9B1C3E04B5002C40D3 /* ActivityIndicator.swift in Sources */,
+				661B9C9D1C5A64BE001FCAE4 /* ModeSetting.swift in Sources */,
 				661A71C61C2BC497000DEAAA /* CameraViewController.swift in Sources */,
 				668FEB9D1C3E0CEB002C40D3 /* FrontCameraMode.swift in Sources */,
 				661A71951C2BC17A000DEAAA /* AppDelegate.swift in Sources */,
@@ -428,6 +502,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -444,7 +519,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -473,6 +548,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -483,7 +559,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -496,11 +572,16 @@
 			baseConfigurationReference = 7A9F7D692F954DBB838FD8DA /* Pods-MagicCamera.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = MagicCamera/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.akkeylab.MagicCamera;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "MagicCamera/MagicCamera-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -509,11 +590,16 @@
 			baseConfigurationReference = CEBC8A89E964840E98DA8D48 /* Pods-MagicCamera.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = MagicCamera/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.akkeylab.MagicCamera;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "MagicCamera/MagicCamera-Bridging-Header.h";
+				"SWIFT_OPTIMIZATION_LEVEL[arch=*]" = "-O";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
